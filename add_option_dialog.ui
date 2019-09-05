@@ -46,6 +46,9 @@
     </layout>
    </item>
    <item>
+    <widget class="QListWidget" name="listWidgetOptions"/>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <spacer name="horizontalSpacer">
@@ -81,9 +84,6 @@
       </spacer>
      </item>
     </layout>
-   </item>
-   <item>
-    <widget class="QListView" name="listViewOptions"/>
    </item>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">

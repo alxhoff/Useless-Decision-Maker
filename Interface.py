@@ -9,6 +9,7 @@ import QuestionScreen
 import AddOptionDialog
 
 from DatabaseHelper import SQLHelper
+from Question import Question
 
 
 class ProgramUI:
@@ -17,8 +18,8 @@ class ProgramUI:
 
         self.start_screen = StartScreen()
         self.question_screen = QuestionScreen()
-        self.add_option_dialog = AddOptionDialog()
         self.start_screen.show()
+
         # Connect start button to slot
         self.start_screen.labelStartButton.clicked.connect(self.StartScreenFinished)
 
@@ -40,10 +41,10 @@ class QuestionScreen(QMainWindow, QuestionScreen.Ui_MainWindow):
 
         self.sql_helper = SQLHelper('decisions.db')
 
-        self.question_list_model = QStandardItemModel(self.listViewQuestions)
-        self.listViewQuestions.setModel(self.question_list_model)
         self.question_list = []
         self.refresh_question_list()
+
+        self.tmp_question = Question(None, "")
 
         # Buttons
         self.pushButtonAdd.clicked.connect(self.add_question_button)
@@ -61,7 +62,7 @@ class QuestionScreen(QMainWindow, QuestionScreen.Ui_MainWindow):
         self.sql_helper.add_question("test question 2", "option 3", "option 4")
 
     def add_option_button(self):
-        dialog = AddOptionDialog()
+        dialog = AddOptionDialog(self.tmp_question)
         dialog.exec_()
 
     def add_question_button(self):
@@ -80,22 +81,43 @@ class QuestionScreen(QMainWindow, QuestionScreen.Ui_MainWindow):
         self.question_list = self.sql_helper.get_all_questions()
 
         for question in self.question_list:
-            item = QStandardItem(question.string)
-            self.question_list_model.appendRow(item)
+            self.listWidgetQuestions.addItem(question.string)
 
-        self.listViewQuestions.show()
+        self.listWidgetQuestions.show()
 
 
 class AddOptionDialog(QDialog, AddOptionDialog.Ui_Dialog):
 
-    def __init__(self, parent=None):
+    def __init__(self, question, parent=None):
         super().__init__(parent)
         self.setupUi(self)
 
+        for option in question.options:
+            self.listWidgetOptions.addItem(option)
+
+        self.question = question
+
         self.pushButtonAddOption.clicked.connect(self.add_button)
+        self.buttonBox.accepted.connect(self.accept)
+        self.buttonBox.rejected.connect(self.reject)
+
+        self.option_list = []
 
     def add_button(self):
-        pass
+        option = self.lineEditOption.text()
+        item = QStandardItem(option)
+
+        self.option_list.append(option)
+        self.listWidgetOptions.addItem(option)
+
+        self.lineEditOption.clear()
+
+    def accept(self):
+        self.question.options = self.option_list
+        super(AddOptionDialog, self).accept()
+
+    def reject(self):
+        super(AddOptionDialog, self).reject()
 
 
 app = QApplication(sys.argv)

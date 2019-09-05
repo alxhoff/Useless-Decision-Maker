@@ -210,7 +210,7 @@
      </layout>
     </item>
     <item>
-     <widget class="QListView" name="listViewQuestions"/>
+     <widget class="QListWidget" name="listWidgetQuestions"/>
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_5">
