@@ -59,13 +59,7 @@ class QuestionScreen(QMainWindow, QuestionScreen.Ui_MainWindow):
         self.pushButtonDecide.clicked.connect(self.decide_button)
         self.pushButtonModify.clicked.connect(self.modify_button)
 
-        #  self.dummy_data()
-
         self.refresh_question_list()
-
-    def dummy_data(self):
-        self.sql_helper.add_question("test question 1", "option 1", "option 2")
-        self.sql_helper.add_question("test question 2", "option 3", "option 4")
 
     def add_option_button(self):
         dialog = AddOptionDialog(self.tmp_question)
