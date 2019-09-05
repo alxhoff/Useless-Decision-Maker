@@ -12,7 +12,6 @@ class QLabelClickable(QLabel):
 
     def mousePressEvent(self, event):
         self.clicked.emit()
-        print("Clicked")
 
     def mouseReleaseEvent(self, event):
         pass

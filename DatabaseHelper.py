@@ -17,7 +17,7 @@ class SQLType(Enum):
         return str(self.value)
 
 
-class SDLHelper:
+class SQLHelper:
 
     def __init__(self, database_name):
         self.database_name = database_name
@@ -54,14 +54,12 @@ class SDLHelper:
 
     def add_question_string(self, question):
         sql = '''INSERT INTO questions (string) VALUES('{}')'''.format(question)
-        print(sql)
         self.cursor.execute(sql)
         return self.cursor.lastrowid
 
     def add_question_options(self, question_id, option):
         sql = '''INSERT INTO options (question_id, string)
         VALUES ({}, '{}')'''.format(question_id, option)
-        print(sql)
         self.cursor.execute(sql)
 
     def query_all_questions(self):
@@ -102,13 +100,3 @@ class SDLHelper:
                 ret.append(question)
 
         return ret
-
-
-helper = SDLHelper("hello.db")
-helper.add_question('What is for dinner', 'pasta', 'pizza')
-helper.add_question('What is for lunch?', 'pasta', 'pizza')
-
-questions = helper.get_all_questions()
-
-for question in questions:
-    question.print()
