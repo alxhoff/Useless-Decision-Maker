@@ -38,6 +38,8 @@ class Ui_Dialog(object):
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem)
         self.pushButtonAddOption = QtWidgets.QPushButton(Dialog)
+        self.pushButtonAddOption.setAutoDefault(False)
+        self.pushButtonAddOption.setDefault(True)
         self.pushButtonAddOption.setObjectName("pushButtonAddOption")
         self.horizontalLayout_2.addWidget(self.pushButtonAddOption)
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)

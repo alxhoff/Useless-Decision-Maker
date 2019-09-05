@@ -10,6 +10,11 @@ class Question:
         for option in options:
             self.options.append(option)
 
+    def clear(self):
+        self.id = None
+        self.string = None
+        self.options = []
+
     def print(self):
         print(self.string)
         for option in self.options:

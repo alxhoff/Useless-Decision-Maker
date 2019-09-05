@@ -66,6 +66,9 @@
         <property name="text">
          <string>Add Options</string>
         </property>
+        <property name="default">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item>
@@ -84,7 +87,7 @@
      </layout>
     </item>
     <item>
-     <widget class="QListView" name="listViewOptions"/>
+     <widget class="QListWidget" name="listWidgetOptions"/>
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -180,7 +183,7 @@
       <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>&lt;b&gt;Previous Questions&lt;/b&gt;</string>
+         <string>&lt;b&gt;Previous Decisions&lt;/b&gt;</string>
         </property>
         <property name="textFormat">
          <enum>Qt::AutoText</enum>
@@ -230,7 +233,27 @@
       <item>
        <widget class="QPushButton" name="pushButtonDecide">
         <property name="text">
-         <string>Decide Question</string>
+         <string>Decide</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_10">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButtonModify">
+        <property name="text">
+         <string>Modify</string>
         </property>
        </widget>
       </item>
@@ -250,7 +273,7 @@
       <item>
        <widget class="QPushButton" name="pushButtonDelete">
         <property name="text">
-         <string>Delete Question</string>
+         <string>Delete</string>
         </property>
        </widget>
       </item>

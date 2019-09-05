@@ -1,5 +1,5 @@
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtCore import Qt, pyqtSignal, QTimer
+from PyQt5.QtCore import Qt, pyqtSignal, QTimer, QEvent
 from PyQt5.QtWidgets import QApplication, QDialog, QLabel, QMessageBox
 
 
