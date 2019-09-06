@@ -63,6 +63,7 @@ class DecisionScreen(QMainWindow, DecisionScreen.Ui_MainWindow):
         self.pushButtonDelete.clicked.connect(self.delete_button)
         self.pushButtonDecide.clicked.connect(self.decide_button)
         self.pushButtonModify.clicked.connect(self.modify_button)
+        self.pushButtonClearFilter.clicked.connect(self.clear_filter_button)
 
         # Search Input
         self.lineEditSearch.textChanged.connect(self.search)
@@ -105,6 +106,10 @@ class DecisionScreen(QMainWindow, DecisionScreen.Ui_MainWindow):
 
         self.refresh_decision_list()
         self.lineEditDecision.setFocus()
+
+    def clear_filter_button(self):
+        self.lineEditSearch.clear()
+        self.search()
 
     def clear_button(self):
         self.tmp_decision.clear()
@@ -204,6 +209,7 @@ class EditOptionDialog(QDialog, EditOptionDialog.Ui_Dialog):
         self.setupUi(self)
         self.sql_helper = sql_helper
         self.decision = decision
+        self.pushButtonAddOption.clicked.connect(self.add_option)
         self.lineEditDecision.setText(decision.string)
         self.option_labels = []
         self.option_line_edits = []
@@ -217,6 +223,24 @@ class EditOptionDialog(QDialog, EditOptionDialog.Ui_Dialog):
             HLayout.addWidget(self.option_line_edits[i])
 
             self.verticalLayoutOptions.addLayout(HLayout)
+
+    def add_option(self):
+        option_text = self.lineEditOption.text()
+        print("Option text: {}".format(option_text))
+        if option_text:
+            label = QLabel("Option *")
+            line_edit = QLineEdit()
+            HLayout = QHBoxLayout()
+            HLayout.addWidget(label)
+            HLayout.addWidget(line_edit)
+            self.verticalLayoutOptions.addLayout(HLayout)
+            line_edit.setText(option_text)
+            self.sql_helper.add_decision_option(self.decision.id, option_text)
+            self.lineEditOption.clear()
+        else:
+            QMessageBox.warning(self, "Missing parameter", "Please add a valid decision option!")
+
+        print("option added")
 
     def accept(self):
         self.sql_helper.update_decision(self.decision.id, self.lineEditDecision.text())

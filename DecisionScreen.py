@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'decision_frame.ui'
+# Form implementation generated from reading ui file 'UI/decision_frame.ui'
 #
 # Created by: PyQt5 UI code generator 5.13.0
 #
@@ -92,6 +92,9 @@ class Ui_MainWindow(object):
         self.lineEditSearch = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEditSearch.setObjectName("lineEditSearch")
         self.horizontalLayout.addWidget(self.lineEditSearch)
+        self.pushButtonClearFilter = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButtonClearFilter.setObjectName("pushButtonClearFilter")
+        self.horizontalLayout.addWidget(self.pushButtonClearFilter)
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.listWidgetDecisions = QtWidgets.QListWidget(self.centralwidget)
         self.listWidgetDecisions.setObjectName("listWidgetDecisions")
@@ -151,6 +154,7 @@ class Ui_MainWindow(object):
         self.pushButtonClear.setText(_translate("MainWindow", "Clear"))
         self.label.setText(_translate("MainWindow", "<b>Previous Decisions</b>"))
         self.labelSearch.setText(_translate("MainWindow", "Filter:"))
+        self.pushButtonClearFilter.setText(_translate("MainWindow", "Clear Filter"))
         self.pushButtonDecide.setText(_translate("MainWindow", "Decide"))
         self.pushButtonModify.setText(_translate("MainWindow", "Modify"))
         self.pushButtonDelete.setText(_translate("MainWindow", "Delete"))
