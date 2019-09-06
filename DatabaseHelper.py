@@ -3,7 +3,7 @@ import hashlib
 
 from enum import Enum
 
-from Question import Question
+from Question import Question, Option
 
 
 class SQLType(Enum):
@@ -77,6 +77,11 @@ class SQLHelper:
         self.cursor.execute(sql)
         return self.cursor.fetchall()
 
+    def query_all_options(self, q_id):
+        sql = "SELECT * FROM 'options' WHERE question_id={}".format(q_id)
+        self.cursor.execute(sql)
+        return self.cursor.fetchall()
+
     def get_all_question_ids(self):
         questions = self.query_all_questions()
         ret = []
@@ -84,6 +89,12 @@ class SQLHelper:
             ret.append(question[0])
 
         return ret
+
+    def get_all_option_ids(self, q_id):
+        options = self.query_all_options(q_id)
+        ret = []
+        for option in options:
+            ret.append(option[0])
 
     def get_question(self, q_id):
         sql = "SELECT * FROM questions WHERE question_id={}".format(q_id)
@@ -97,7 +108,7 @@ class SQLHelper:
             options = self.cursor.fetchall()
 
             for option in options:
-                ret.options.append(option[2])
+                ret.options.append(Option(option[1], option[0], option[2]))
 
             return ret
 
@@ -107,6 +118,16 @@ class SQLHelper:
         question = self.cursor.fetchall()
         if question:
             return self.get_question(question[0][0])
+
+    def update_question(self, q_id, string):
+        sql = """UPDATE questions SET string='{}' WHERE question_id={}""".format(string, q_id)
+        self.cursor.execute(sql)
+        self.conn.commit()
+
+    def update_option(self, o_id, string):
+        sql = """UPDATE options SET string='{}' WHERE option_id={}""".format(string, o_id)
+        self.cursor.execute(sql)
+        self.conn.commit()
 
     def remove_question_string(self, string):
         question = self.get_question_string(string)

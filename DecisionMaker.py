@@ -39,10 +39,6 @@ class StartScreen(QMainWindow, StartScreen.Ui_MainWindow):
 
         self.setupUi(self)
 
-class EditOptionDialog(QDialog, EditOptionDialog.Ui_Dialog):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.setupUi(self)
 
 class QuestionScreen(QMainWindow, QuestionScreen.Ui_MainWindow):
     def __init__(self, parent=None):
@@ -105,7 +101,7 @@ class QuestionScreen(QMainWindow, QuestionScreen.Ui_MainWindow):
             row_index = row[0].row()
             question = self.question_list[row_index]
             option_index = random.randint(0, len(question.options) - 1)
-            option = question.options[option_index]
+            option = question.options[option_index].string
             reply = "Decision: \n\n{}".format(option)
             QMessageBox.question(self, question.string, reply, QMessageBox.Ok)
         else:
@@ -123,12 +119,15 @@ class QuestionScreen(QMainWindow, QuestionScreen.Ui_MainWindow):
             QMessageBox.warning(self, "", "Decision must be selected first", QMessageBox.Ok)
 
     def modify_button(self):
-        dialog = EditOptionDialog()
-        if dialog.exec_() == QDialog.Accepted:
-            #update
-            pass
-
-
+        row = self.listWidgetQuestions.selectedIndexes()
+        if (row):
+            row_index = row[0].row()
+            question = self.question_list[row_index]
+            dialog = EditOptionDialog(question, self.sql_helper)
+            if dialog.exec_() == QDialog.Accepted:
+                self.refresh_question_list()
+        else:
+            QMessageBox.warning(self, "", "Decision must be selected first", QMessageBox.Ok)
 
     def refresh_question_list(self):
         self.listWidgetQuestions.clear()
@@ -176,6 +175,36 @@ class AddOptionDialog(QDialog, AddOptionDialog.Ui_Dialog):
 
     def reject(self):
         super(AddOptionDialog, self).reject()
+
+
+class EditOptionDialog(QDialog, EditOptionDialog.Ui_Dialog):
+    def __init__(self, question, sql_helper, parent=None):
+        super().__init__(parent)
+        self.setupUi(self)
+        self.sql_helper = sql_helper
+        self.question = question
+        self.lineEditDecision.setText(question.string)
+        self.option_labels = []
+        self.option_line_edits = []
+        for i, option in enumerate(question.options):
+            self.option_labels.append(QLabel("Option {}:".format(i)))
+            self.option_line_edits.append(QLineEdit())
+            self.option_line_edits[i].setText(question.options[i].string)
+
+            HLayout = QHBoxLayout()
+            HLayout.addWidget(self.option_labels[i])
+            HLayout.addWidget(self.option_line_edits[i])
+
+            self.verticalLayoutOptions.addLayout(HLayout)
+
+    def accept(self):
+        self.sql_helper.update_question(self.question.id, self.lineEditDecision.text())
+        for i, option in enumerate(self.question.options):
+            self.sql_helper.update_option(option.id, self.option_line_edits[i].text())
+        super(EditOptionDialog, self).accept()
+
+    def reject(self):
+        super(EditOptionDialog, self).reject()
 
 
 app = QApplication(sys.argv)

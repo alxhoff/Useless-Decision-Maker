@@ -1,9 +1,11 @@
 
 class Option:
 
-    def __init__(self, o_id, string):
+    def __init__(self, q_id, o_id, string):
+        self.q_id = q_id
         self.id = o_id
         self.string = string
+
 
 class Question:
     """A decision that has been or needs to be made
