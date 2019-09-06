@@ -150,7 +150,7 @@ class Ui_MainWindow(object):
         self.pushButtonAdd.setText(_translate("MainWindow", "Add"))
         self.pushButtonClear.setText(_translate("MainWindow", "Clear"))
         self.label.setText(_translate("MainWindow", "<b>Previous Decisions</b>"))
-        self.labelSearch.setText(_translate("MainWindow", "Search"))
+        self.labelSearch.setText(_translate("MainWindow", "Filter:"))
         self.pushButtonDecide.setText(_translate("MainWindow", "Decide"))
         self.pushButtonModify.setText(_translate("MainWindow", "Modify"))
         self.pushButtonDelete.setText(_translate("MainWindow", "Delete"))

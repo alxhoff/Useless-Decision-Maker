@@ -1,6 +1,8 @@
 import random
 import time
 import sys
+import fnmatch
+
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
@@ -52,6 +54,8 @@ class QuestionScreen(QMainWindow, QuestionScreen.Ui_MainWindow):
 
         self.tmp_question = Question(None, "")
 
+        self.search_list = []
+
         # Buttons
         self.pushButtonAdd.clicked.connect(self.add_question_button)
         self.pushButtonAddOptions.clicked.connect(self.add_option_button)
@@ -60,7 +64,21 @@ class QuestionScreen(QMainWindow, QuestionScreen.Ui_MainWindow):
         self.pushButtonDecide.clicked.connect(self.decide_button)
         self.pushButtonModify.clicked.connect(self.modify_button)
 
+        # Search Input
+        self.lineEditSearch.textChanged.connect(self.search)
+
         self.refresh_question_list()
+
+    def search(self):
+        search_string = self.lineEditSearch.text()
+        if not search_string:
+                # Show original
+            self.refresh_question_list()
+        else:
+            self.clearQuestionList()
+            for question in self.question_list:
+                if fnmatch.fnmatch(question.string, "*{}*".format(search_string)):
+                    self.listWidgetQuestions.addItem(question.string)
 
     def add_option_button(self):
         dialog = AddOptionDialog(self.tmp_question)
@@ -90,16 +108,19 @@ class QuestionScreen(QMainWindow, QuestionScreen.Ui_MainWindow):
 
     def clear_button(self):
         self.tmp_question.clear()
-        while self.listWidgetOptions.count() > 0:
-            self.listWidgetOptions.takeItem(0)
+        self.clearQuestionList()
         self.lineEditQuestion.clear()
         self.lineEditQuestion.setFocus()
+
+    def clearQuestionList(self):
+        while self.listWidgetQuestions.count() > 0:
+            self.listWidgetQuestions.takeItem(0)
 
     def decide_button(self):
         row = self.listWidgetQuestions.selectedIndexes()
         if(row):
-            row_index = row[0].row()
-            question = self.question_list[row_index]
+            question_string = self.listWidgetQuestions.currentItem().text()
+            question = self.sql_helper.get_question_string(question_string)
             option_index = random.randint(0, len(question.options) - 1)
             option = question.options[option_index].string
             reply = "Decision: \n\n{}".format(option)
@@ -110,22 +131,22 @@ class QuestionScreen(QMainWindow, QuestionScreen.Ui_MainWindow):
     def delete_button(self):
         row = self.listWidgetQuestions.selectedIndexes()
         if(row):
-            row_index = row[0].row()
-            question = self.question_list[row_index]
-            self.sql_helper.remove_question_string(question.string)
-            del self.question_list[row_index]
-            self.listWidgetQuestions.takeItem(row_index)
+            question_string = self.listWidgetQuestions.currentItem().text()
+            self.sql_helper.remove_question_string(question_string)
+            self.refresh_question_list()
+            self.search()
         else:
             QMessageBox.warning(self, "", "Decision must be selected first", QMessageBox.Ok)
 
     def modify_button(self):
         row = self.listWidgetQuestions.selectedIndexes()
         if (row):
-            row_index = row[0].row()
-            question = self.question_list[row_index]
+            question_string = self.listWidgetQuestions.currentItem().text()
+            question = self.sql_helper.get_question_string(question_string)
             dialog = EditOptionDialog(question, self.sql_helper)
             if dialog.exec_() == QDialog.Accepted:
                 self.refresh_question_list()
+                self.search()
         else:
             QMessageBox.warning(self, "", "Decision must be selected first", QMessageBox.Ok)
 
