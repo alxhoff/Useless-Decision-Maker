@@ -1,4 +1,10 @@
 
+class Option:
+
+    def __init__(self, o_id, string):
+        self.id = o_id
+        self.string = string
+
 class Question:
     """A decision that has been or needs to be made
     """
@@ -9,6 +15,9 @@ class Question:
         self.options = []
         for option in options:
             self.options.append(option)
+
+    def addoption(self, option):
+        self.options.append(option)
 
     def clear(self):
         self.id = None

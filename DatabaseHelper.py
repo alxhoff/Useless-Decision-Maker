@@ -38,12 +38,14 @@ class SQLHelper:
         return conn
 
     def init_questions_table(self):
-        sql = "CREATE TABLE IF NOT EXISTS questions(question_id INTEGER PRIMARY KEY AUTOINCREMENT, string TEXT)"
+        sql = """CREATE TABLE IF NOT EXISTS questions(question_id INTEGER
+        PRIMARY KEY AUTOINCREMENT, string TEXT)"""
         self.cursor.execute(sql)
         self.conn.commit()
 
     def init_options_table(self):
-        sql = "CREATE TABLE IF NOT EXISTS options(question_id INTEGER, string TEXT)"
+        sql = """CREATE TABLE IF NOT EXISTS options(option_id INTEGER PRIMARY KEY,
+        question_id INTEGER, string TEXT)"""
         self.cursor.execute(sql)
         self.conn.commit()
 
@@ -95,7 +97,7 @@ class SQLHelper:
             options = self.cursor.fetchall()
 
             for option in options:
-                ret.options.append(option[1])
+                ret.options.append(option[2])
 
             return ret
 

@@ -8,6 +8,7 @@ from PyQt5.QtCore import *
 import StartScreen
 import QuestionScreen
 import AddOptionDialog
+import EditOptionDialog
 
 from DatabaseHelper import SQLHelper
 from Question import Question
@@ -38,6 +39,10 @@ class StartScreen(QMainWindow, StartScreen.Ui_MainWindow):
 
         self.setupUi(self)
 
+class EditOptionDialog(QDialog, EditOptionDialog.Ui_Dialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setupUi(self)
 
 class QuestionScreen(QMainWindow, QuestionScreen.Ui_MainWindow):
     def __init__(self, parent=None):
@@ -118,7 +123,12 @@ class QuestionScreen(QMainWindow, QuestionScreen.Ui_MainWindow):
             QMessageBox.warning(self, "", "Decision must be selected first", QMessageBox.Ok)
 
     def modify_button(self):
-        pass
+        dialog = EditOptionDialog()
+        if dialog.exec_() == QDialog.Accepted:
+            #update
+            pass
+
+
 
     def refresh_question_list(self):
         self.listWidgetQuestions.clear()
