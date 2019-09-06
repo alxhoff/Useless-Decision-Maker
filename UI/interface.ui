@@ -1,72 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>800</width>
-    <height>600</height>
-   </rect>
-  </property>
-  <property name="windowTitle">
-   <string>MainWindow</string>
-  </property>
-  <property name="animated">
-   <bool>false</bool>
-  </property>
-  <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QWidget" name="widget" native="true">
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <property name="leftMargin">
-        <number>100</number>
-       </property>
-       <property name="topMargin">
-        <number>100</number>
-       </property>
-       <property name="rightMargin">
-        <number>100</number>
-       </property>
-       <property name="bottomMargin">
-        <number>100</number>
-       </property>
-       <item>
-        <widget class="QLabelClickable" name="labelStartButton">
-         <property name="text">
-          <string/>
-         </property>
-         <property name="pixmap">
-          <pixmap>icon/start.png</pixmap>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-         <property name="margin">
-          <number>0</number>
-         </property>
+    <class>MainWindow</class>
+    <widget class="QMainWindow" name="MainWindow">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>800</width>
+                <height>600</height>
+            </rect>
+        </property>
+        <property name="windowTitle">
+            <string>MainWindow</string>
+        </property>
+        <property name="animated">
+            <bool>false</bool>
+        </property>
+        <widget class="QWidget" name="centralwidget">
+            <layout class="QVBoxLayout" name="verticalLayout">
+                <item>
+                    <widget class="QWidget" name="widget" native="true">
+                        <layout class="QHBoxLayout" name="horizontalLayout">
+                            <property name="leftMargin">
+                                <number>100</number>
+                            </property>
+                            <property name="topMargin">
+                                <number>100</number>
+                            </property>
+                            <property name="rightMargin">
+                                <number>100</number>
+                            </property>
+                            <property name="bottomMargin">
+                                <number>100</number>
+                            </property>
+                            <item>
+                                <widget class="QLabelClickable" name="labelStartButton">
+                                    <property name="text">
+                                        <string/>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap>icon/start.png</pixmap>
+                                    </property>
+                                    <property name="alignment">
+                                        <set>Qt::AlignCenter</set>
+                                    </property>
+                                    <property name="margin">
+                                        <number>0</number>
+                                    </property>
+                                </widget>
+                            </item>
+                        </layout>
+                    </widget>
+                </item>
+            </layout>
         </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <action name="actionPreferenes">
-   <property name="text">
-    <string>Preferences</string>
-   </property>
-  </action>
- </widget>
- <customwidgets>
-  <customwidget>
-   <class>QLabelClickable</class>
-   <extends>QLabel</extends>
-   <header>qlabelclickable</header>
-  </customwidget>
- </customwidgets>
- <resources/>
- <connections/>
+        <action name="actionPreferenes">
+            <property name="text">
+                <string>Preferences</string>
+            </property>
+        </action>
+    </widget>
+    <customwidgets>
+        <customwidget>
+            <class>QLabelClickable</class>
+            <extends>QLabel</extends>
+            <header>qlabelclickable</header>
+        </customwidget>
+    </customwidgets>
+    <resources/>
+    <connections/>
 </ui>

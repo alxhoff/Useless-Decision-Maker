@@ -17,7 +17,7 @@ class Ui_Dialog(object):
         self.verticalLayout = QtWidgets.QVBoxLayout(Dialog)
         self.verticalLayout.setObjectName("verticalLayout")
         self.labelTitle = QtWidgets.QLabel(Dialog)
-        self.labelTitle.setAlignment(QtCore.Qt.AlignHCenter|QtCore.Qt.AlignTop)
+        self.labelTitle.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignTop)
         self.labelTitle.setObjectName("labelTitle")
         self.verticalLayout.addWidget(self.labelTitle)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
@@ -47,7 +47,7 @@ class Ui_Dialog(object):
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.buttonBox = QtWidgets.QDialogButtonBox(Dialog)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
+        self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel | QtWidgets.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName("buttonBox")
         self.verticalLayout.addWidget(self.buttonBox)
 
@@ -59,7 +59,7 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.labelTitle.setText(_translate("Dialog", "Add Question Options"))
+        self.labelTitle.setText(_translate("Dialog", "Add Decision Options"))
         self.labelOption.setText(_translate("Dialog", "Option:"))
         self.lineEditOption.setPlaceholderText(_translate("Dialog", " Add option text"))
         self.pushButtonAddOption.setText(_translate("Dialog", "Add"))

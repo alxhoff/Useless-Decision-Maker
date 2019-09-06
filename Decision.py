@@ -7,7 +7,7 @@ class Option:
         self.string = string
 
 
-class Question:
+class Decision:
     """A decision that has been or needs to be made
     """
 

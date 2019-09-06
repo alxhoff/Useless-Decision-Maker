@@ -8,12 +8,12 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 import StartScreen
-import QuestionScreen
+import DecisionScreen
 import AddOptionDialog
 import EditOptionDialog
 
 from DatabaseHelper import SQLHelper
-from Question import Question
+from Decision import Decision
 
 
 class ProgramUI:
@@ -23,7 +23,7 @@ class ProgramUI:
         random.seed(time.time())
 
         self.start_screen = StartScreen()
-        self.question_screen = QuestionScreen()
+        self.decision_screen = DecisionScreen()
         self.start_screen.show()
 
         # Connect start button to slot
@@ -31,7 +31,7 @@ class ProgramUI:
 
     def StartScreenFinished(self):
         self.start_screen.close()
-        self.question_screen.show()
+        self.decision_screen.show()
 
 
 class StartScreen(QMainWindow, StartScreen.Ui_MainWindow):
@@ -42,22 +42,22 @@ class StartScreen(QMainWindow, StartScreen.Ui_MainWindow):
         self.setupUi(self)
 
 
-class QuestionScreen(QMainWindow, QuestionScreen.Ui_MainWindow):
+class DecisionScreen(QMainWindow, DecisionScreen.Ui_MainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)
 
         self.sql_helper = SQLHelper('decisions.db')
 
-        self.question_list = []
-        self.refresh_question_list()
+        self.decision_list = []
+        self.refresh_decision_list()
 
-        self.tmp_question = Question(None, "")
+        self.tmp_decision = Decision(None, "")
 
         self.search_list = []
 
         # Buttons
-        self.pushButtonAdd.clicked.connect(self.add_question_button)
+        self.pushButtonAdd.clicked.connect(self.add_decision_button)
         self.pushButtonAddOptions.clicked.connect(self.add_option_button)
         self.pushButtonClear.clicked.connect(self.clear_button)
         self.pushButtonDelete.clicked.connect(self.delete_button)
@@ -67,109 +67,109 @@ class QuestionScreen(QMainWindow, QuestionScreen.Ui_MainWindow):
         # Search Input
         self.lineEditSearch.textChanged.connect(self.search)
 
-        self.refresh_question_list()
+        self.refresh_decision_list()
 
     def search(self):
         search_string = self.lineEditSearch.text()
         if not search_string:
                 # Show original
-            self.refresh_question_list()
+            self.refresh_decision_list()
         else:
-            self.clearQuestionList()
-            for question in self.question_list:
-                if fnmatch.fnmatch(question.string, "*{}*".format(search_string)):
-                    self.listWidgetQuestions.addItem(question.string)
+            self.clearDecisionList()
+            for decision in self.decision_list:
+                if fnmatch.fnmatch(decision.string, "*{}*".format(search_string)):
+                    self.listWidgetDecisions.addItem(decision.string)
 
     def add_option_button(self):
-        dialog = AddOptionDialog(self.tmp_question)
+        dialog = AddOptionDialog(self.tmp_decision)
         self.listWidgetOptions.clear()
         if dialog.exec_() == QDialog.Accepted:
-            for option in self.tmp_question.options:
+            for option in self.tmp_decision.options:
                 self.listWidgetOptions.addItem(option)
 
-    def add_question_button(self):
-        self.tmp_question.string = self.lineEditQuestion.text()
-        if self.tmp_question.string == "":
-            QMessageBox.warning(self, "Missing parameter", "Please add a valid decision question!")
+    def add_decision_button(self):
+        self.tmp_decision.string = self.lineEditDecision.text()
+        if self.tmp_decision.string == "":
+            QMessageBox.warning(self, "Missing parameter", "Please add a valid decision decision!")
             return
 
-        if len(self.tmp_question.options) < 2:
+        if len(self.tmp_decision.options) < 2:
             QMessageBox.warning(self, "Missing parameter", "You need more options!")
             return
 
-        self.sql_helper.add_question_object(self.tmp_question)
-        self.tmp_question = Question(None, "")
+        self.sql_helper.add_decision_object(self.tmp_decision)
+        self.tmp_decision = Decision(None, "")
 
-        self.lineEditQuestion.clear()
+        self.lineEditDecision.clear()
         self.listWidgetOptions.clear()
 
-        self.refresh_question_list()
-        self.lineEditQuestion.setFocus()
+        self.refresh_decision_list()
+        self.lineEditDecision.setFocus()
 
     def clear_button(self):
-        self.tmp_question.clear()
-        self.clearQuestionList()
-        self.lineEditQuestion.clear()
-        self.lineEditQuestion.setFocus()
+        self.tmp_decision.clear()
+        self.clearDecisionList()
+        self.lineEditDecision.clear()
+        self.lineEditDecision.setFocus()
 
-    def clearQuestionList(self):
-        while self.listWidgetQuestions.count() > 0:
-            self.listWidgetQuestions.takeItem(0)
+    def clearDecisionList(self):
+        while self.listWidgetDecisions.count() > 0:
+            self.listWidgetDecisions.takeItem(0)
 
     def decide_button(self):
-        row = self.listWidgetQuestions.selectedIndexes()
+        row = self.listWidgetDecisions.selectedIndexes()
         if(row):
-            question_string = self.listWidgetQuestions.currentItem().text()
-            question = self.sql_helper.get_question_string(question_string)
-            option_index = random.randint(0, len(question.options) - 1)
-            option = question.options[option_index].string
+            decision_string = self.listWidgetDecisions.currentItem().text()
+            decision = self.sql_helper.get_decision_string(decision_string)
+            option_index = random.randint(0, len(decision.options) - 1)
+            option = decision.options[option_index].string
             reply = "Decision: \n\n{}".format(option)
-            QMessageBox.question(self, question.string, reply, QMessageBox.Ok)
+            QMessageBox.question(self, decision.string, reply, QMessageBox.Ok)
         else:
             QMessageBox.warning(self, "", "Decision must be selected first", QMessageBox.Ok)
 
     def delete_button(self):
-        row = self.listWidgetQuestions.selectedIndexes()
+        row = self.listWidgetDecisions.selectedIndexes()
         if(row):
-            question_string = self.listWidgetQuestions.currentItem().text()
-            self.sql_helper.remove_question_string(question_string)
-            self.refresh_question_list()
+            decision_string = self.listWidgetDecisions.currentItem().text()
+            self.sql_helper.remove_decision_string(decision_string)
+            self.refresh_decision_list()
             self.search()
         else:
             QMessageBox.warning(self, "", "Decision must be selected first", QMessageBox.Ok)
 
     def modify_button(self):
-        row = self.listWidgetQuestions.selectedIndexes()
+        row = self.listWidgetDecisions.selectedIndexes()
         if (row):
-            question_string = self.listWidgetQuestions.currentItem().text()
-            question = self.sql_helper.get_question_string(question_string)
-            dialog = EditOptionDialog(question, self.sql_helper)
+            decision_string = self.listWidgetDecisions.currentItem().text()
+            decision = self.sql_helper.get_decision_string(decision_string)
+            dialog = EditOptionDialog(decision, self.sql_helper)
             if dialog.exec_() == QDialog.Accepted:
-                self.refresh_question_list()
+                self.refresh_decision_list()
                 self.search()
         else:
             QMessageBox.warning(self, "", "Decision must be selected first", QMessageBox.Ok)
 
-    def refresh_question_list(self):
-        self.listWidgetQuestions.clear()
-        self.question_list = self.sql_helper.get_all_questions()
+    def refresh_decision_list(self):
+        self.listWidgetDecisions.clear()
+        self.decision_list = self.sql_helper.get_all_decisions()
 
-        for question in self.question_list:
-            self.listWidgetQuestions.addItem(question.string)
+        for decision in self.decision_list:
+            self.listWidgetDecisions.addItem(decision.string)
 
-        self.listWidgetQuestions.show()
+        self.listWidgetDecisions.show()
 
 
 class AddOptionDialog(QDialog, AddOptionDialog.Ui_Dialog):
 
-    def __init__(self, question, parent=None):
+    def __init__(self, decision, parent=None):
         super().__init__(parent)
         self.setupUi(self)
 
-        for option in question.options:
+        for option in decision.options:
             self.listWidgetOptions.addItem(option)
 
-        self.question = question
+        self.decision = decision
 
         self.pushButtonAddOption.clicked.connect(self.add_button)
         self.buttonBox.accepted.connect(self.accept)
@@ -191,7 +191,7 @@ class AddOptionDialog(QDialog, AddOptionDialog.Ui_Dialog):
             QMessageBox.warning(self, "Missing parameter", "Please add a valid decision option!")
 
     def accept(self):
-        self.question.options = self.option_list
+        self.decision.options = self.option_list
         super(AddOptionDialog, self).accept()
 
     def reject(self):
@@ -199,18 +199,18 @@ class AddOptionDialog(QDialog, AddOptionDialog.Ui_Dialog):
 
 
 class EditOptionDialog(QDialog, EditOptionDialog.Ui_Dialog):
-    def __init__(self, question, sql_helper, parent=None):
+    def __init__(self, decision, sql_helper, parent=None):
         super().__init__(parent)
         self.setupUi(self)
         self.sql_helper = sql_helper
-        self.question = question
-        self.lineEditDecision.setText(question.string)
+        self.decision = decision
+        self.lineEditDecision.setText(decision.string)
         self.option_labels = []
         self.option_line_edits = []
-        for i, option in enumerate(question.options):
+        for i, option in enumerate(decision.options):
             self.option_labels.append(QLabel("Option {}:".format(i)))
             self.option_line_edits.append(QLineEdit())
-            self.option_line_edits[i].setText(question.options[i].string)
+            self.option_line_edits[i].setText(decision.options[i].string)
 
             HLayout = QHBoxLayout()
             HLayout.addWidget(self.option_labels[i])
@@ -219,8 +219,8 @@ class EditOptionDialog(QDialog, EditOptionDialog.Ui_Dialog):
             self.verticalLayoutOptions.addLayout(HLayout)
 
     def accept(self):
-        self.sql_helper.update_question(self.question.id, self.lineEditDecision.text())
-        for i, option in enumerate(self.question.options):
+        self.sql_helper.update_decision(self.decision.id, self.lineEditDecision.text())
+        for i, option in enumerate(self.decision.options):
             self.sql_helper.update_option(option.id, self.option_line_edits[i].text())
         super(EditOptionDialog, self).accept()
 

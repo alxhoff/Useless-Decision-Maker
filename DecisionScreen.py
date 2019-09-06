@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'question_frame.ui'
+# Form implementation generated from reading ui file 'decision_frame.ui'
 #
 # Created by: PyQt5 UI code generator 5.13.0
 #
@@ -24,12 +24,12 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.label_2)
         self.horizontalLayout_9 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_9.setObjectName("horizontalLayout_9")
-        self.labelQuestion = QtWidgets.QLabel(self.centralwidget)
-        self.labelQuestion.setObjectName("labelQuestion")
-        self.horizontalLayout_9.addWidget(self.labelQuestion)
-        self.lineEditQuestion = QtWidgets.QLineEdit(self.centralwidget)
-        self.lineEditQuestion.setObjectName("lineEditQuestion")
-        self.horizontalLayout_9.addWidget(self.lineEditQuestion)
+        self.labelDecision = QtWidgets.QLabel(self.centralwidget)
+        self.labelDecision.setObjectName("labelDecision")
+        self.horizontalLayout_9.addWidget(self.labelDecision)
+        self.lineEditDecision = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEditDecision.setObjectName("lineEditDecision")
+        self.horizontalLayout_9.addWidget(self.lineEditDecision)
         self.verticalLayout.addLayout(self.horizontalLayout_9)
         self.horizontalLayout_7 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_7.setObjectName("horizontalLayout_7")
@@ -93,9 +93,9 @@ class Ui_MainWindow(object):
         self.lineEditSearch.setObjectName("lineEditSearch")
         self.horizontalLayout.addWidget(self.lineEditSearch)
         self.verticalLayout.addLayout(self.horizontalLayout)
-        self.listWidgetQuestions = QtWidgets.QListWidget(self.centralwidget)
-        self.listWidgetQuestions.setObjectName("listWidgetQuestions")
-        self.verticalLayout.addWidget(self.listWidgetQuestions)
+        self.listWidgetDecisions = QtWidgets.QListWidget(self.centralwidget)
+        self.listWidgetDecisions.setObjectName("listWidgetDecisions")
+        self.verticalLayout.addWidget(self.listWidgetDecisions)
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
         spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -144,8 +144,8 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label_2.setText(_translate("MainWindow", "<b>Add New Decision</b>"))
-        self.labelQuestion.setText(_translate("MainWindow", "Decision to be made:"))
-        self.lineEditQuestion.setPlaceholderText(_translate("MainWindow", "What needs deciding?"))
+        self.labelDecision.setText(_translate("MainWindow", "Decision to be made:"))
+        self.lineEditDecision.setPlaceholderText(_translate("MainWindow", "What needs deciding?"))
         self.pushButtonAddOptions.setText(_translate("MainWindow", "Add Options"))
         self.pushButtonAdd.setText(_translate("MainWindow", "Add"))
         self.pushButtonClear.setText(_translate("MainWindow", "Clear"))

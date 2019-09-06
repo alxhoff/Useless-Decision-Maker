@@ -3,7 +3,7 @@ import hashlib
 
 from enum import Enum
 
-from Question import Question, Option
+from Decision import Decision, Option
 
 
 class SQLType(Enum):
@@ -25,7 +25,7 @@ class SQLHelper:
         self.conn = self.init_connection(database_name)
         self.cursor = self.conn.cursor()
 
-        self.init_questions_table()
+        self.init_decisions_table()
         self.init_options_table()
 
     def init_connection(self, database_name):
@@ -37,56 +37,56 @@ class SQLHelper:
 
         return conn
 
-    def init_questions_table(self):
-        sql = """CREATE TABLE IF NOT EXISTS questions(question_id INTEGER
+    def init_decisions_table(self):
+        sql = """CREATE TABLE IF NOT EXISTS decisions(decision_id INTEGER
         PRIMARY KEY AUTOINCREMENT, string TEXT)"""
         self.cursor.execute(sql)
         self.conn.commit()
 
     def init_options_table(self):
         sql = """CREATE TABLE IF NOT EXISTS options(option_id INTEGER PRIMARY KEY,
-        question_id INTEGER, string TEXT)"""
+        decision_id INTEGER, string TEXT)"""
         self.cursor.execute(sql)
         self.conn.commit()
 
-    def add_question_object(self, question):
-        q_id = self.add_question_string(question.string)
-        for option in question.options:
-            self.add_question_option(q_id, option)
+    def add_decision_object(self, decision):
+        q_id = self.add_decision_string(decision.string)
+        for option in decision.options:
+            self.add_decision_option(q_id, option)
         self.conn.commit()
 
-    def add_question(self, question, *options):
-        q_id = self.add_question_string(question)
+    def add_decision(self, decision, *options):
+        q_id = self.add_decision_string(decision)
         for option in options:
-            self.add_question_option(q_id, option)
+            self.add_decision_option(q_id, option)
         self.conn.commit()
 
-    def add_question_string(self, question):
-        sql = "INSERT INTO questions(string) VALUES('{}')".format(question)
+    def add_decision_string(self, decision):
+        sql = "INSERT INTO decisions(string) VALUES('{}')".format(decision)
         self.cursor.execute(sql)
         self.conn.commit()
         return self.cursor.lastrowid
 
-    def add_question_option(self, question_id, option):
-        sql = "INSERT INTO options(question_id, string) VALUES ({}, '{}')".format(question_id, option)
+    def add_decision_option(self, decision_id, option):
+        sql = "INSERT INTO options(decision_id, string) VALUES ({}, '{}')".format(decision_id, option)
         self.cursor.execute(sql)
         self.conn.commit()
 
-    def query_all_questions(self):
-        sql = "SELECT * FROM 'questions'"
+    def query_all_decisions(self):
+        sql = "SELECT * FROM 'decisions'"
         self.cursor.execute(sql)
         return self.cursor.fetchall()
 
     def query_all_options(self, q_id):
-        sql = "SELECT * FROM 'options' WHERE question_id={}".format(q_id)
+        sql = "SELECT * FROM 'options' WHERE decision_id={}".format(q_id)
         self.cursor.execute(sql)
         return self.cursor.fetchall()
 
-    def get_all_question_ids(self):
-        questions = self.query_all_questions()
+    def get_all_decision_ids(self):
+        decisions = self.query_all_decisions()
         ret = []
-        for question in questions:
-            ret.append(question[0])
+        for decision in decisions:
+            ret.append(decision[0])
 
         return ret
 
@@ -96,14 +96,14 @@ class SQLHelper:
         for option in options:
             ret.append(option[0])
 
-    def get_question(self, q_id):
-        sql = "SELECT * FROM questions WHERE question_id={}".format(q_id)
+    def get_decision(self, q_id):
+        sql = "SELECT * FROM decisions WHERE decision_id={}".format(q_id)
         self.cursor.execute(sql)
-        question = self.cursor.fetchall()
-        if question:
-            ret = Question(question[0][0], question[0][1])
+        decision = self.cursor.fetchall()
+        if decision:
+            ret = Decision(decision[0][0], decision[0][1])
 
-            sql = "SELECT * FROM options WHERE question_id={}".format(q_id)
+            sql = "SELECT * FROM options WHERE decision_id={}".format(q_id)
             self.cursor.execute(sql)
             options = self.cursor.fetchall()
 
@@ -112,15 +112,15 @@ class SQLHelper:
 
             return ret
 
-    def get_question_string(self, string):
-        sql = "SELECT * FROM questions WHERE string='{}'".format(string)
+    def get_decision_string(self, string):
+        sql = "SELECT * FROM decisions WHERE string='{}'".format(string)
         self.cursor.execute(sql)
-        question = self.cursor.fetchall()
-        if question:
-            return self.get_question(question[0][0])
+        decision = self.cursor.fetchall()
+        if decision:
+            return self.get_decision(decision[0][0])
 
-    def update_question(self, q_id, string):
-        sql = """UPDATE questions SET string='{}' WHERE question_id={}""".format(string, q_id)
+    def update_decision(self, q_id, string):
+        sql = """UPDATE decisions SET string='{}' WHERE decision_id={}""".format(string, q_id)
         self.cursor.execute(sql)
         self.conn.commit()
 
@@ -129,21 +129,21 @@ class SQLHelper:
         self.cursor.execute(sql)
         self.conn.commit()
 
-    def remove_question_string(self, string):
-        question = self.get_question_string(string)
-        if question:
-            sql = "DELETE FROM questions WHERE string='{}'".format(question.string)
+    def remove_decision_string(self, string):
+        decision = self.get_decision_string(string)
+        if decision:
+            sql = "DELETE FROM decisions WHERE string='{}'".format(decision.string)
             self.cursor.execute(sql)
-            for option in question.options:
+            for option in decision.options:
                 sql = "DELETE FROM options WHERE string='{}'".format(option)
             self.conn.commit()
 
-    def get_all_questions(self):
+    def get_all_decisions(self):
         ret = []
-        ids = self.get_all_question_ids()
+        ids = self.get_all_decision_ids()
         for q_id in ids:
-            question = self.get_question(q_id)
-            if question:
-                ret.append(question)
+            decision = self.get_decision(q_id)
+            if decision:
+                ret.append(decision)
 
         return ret
