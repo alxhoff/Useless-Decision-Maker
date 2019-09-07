@@ -213,16 +213,41 @@ class EditOptionDialog(QDialog, EditOptionDialog.Ui_Dialog):
         self.lineEditDecision.setText(decision.string)
         self.option_labels = []
         self.option_line_edits = []
+        self.option_buttons = []
+        self.option_layouts = []
+        self.o_ids = []
         for i, option in enumerate(decision.options):
+            self.o_ids.append(option.id)
             self.option_labels.append(QLabel("Option {}:".format(i)))
             self.option_line_edits.append(QLineEdit())
             self.option_line_edits[i].setText(decision.options[i].string)
+            self.option_buttons.append(QPushButton())
+            self.option_buttons[i].setIcon(QIcon(QPixmap("icon/cross.png")))
+            self.option_buttons[i].setCheckable(True)
+            self.option_buttons[i].clicked.connect(self.delete_button)
 
             HLayout = QHBoxLayout()
             HLayout.addWidget(self.option_labels[i])
             HLayout.addWidget(self.option_line_edits[i])
+            HLayout.addWidget(self.option_buttons[i])
+            self.option_layouts.append(HLayout)
 
             self.verticalLayoutOptions.addLayout(HLayout)
+
+    def delete_button(self):
+        for i, button in enumerate(self.option_buttons):
+            if button.isChecked():
+                del self.o_ids[i]
+                button.setChecked(False)
+                self.option_buttons[i].deleteLater()
+                del self.option_buttons[i]
+                self.option_labels[i].deleteLater()
+                del self.option_labels[i]
+                self.option_line_edits[i].deleteLater()
+                del self.option_line_edits[i]
+                self.verticalLayoutOptions.itemAt(i).layout().deleteLater()
+                self.option_layouts[i].deleteLater()
+                del self.option_layouts[i]
 
     def add_option(self):
         option_text = self.lineEditOption.text()
@@ -240,12 +265,13 @@ class EditOptionDialog(QDialog, EditOptionDialog.Ui_Dialog):
         else:
             QMessageBox.warning(self, "Missing parameter", "Please add a valid decision option!")
 
-        print("option added")
-
     def accept(self):
+        deleted_options = set(option.id for option in self.decision.options).difference(self.o_ids)
         self.sql_helper.update_decision(self.decision.id, self.lineEditDecision.text())
-        for i, option in enumerate(self.decision.options):
+        for i, option in enumerate(option for option in self.decision.options if option.id not in deleted_options):
             self.sql_helper.update_option(option.id, self.option_line_edits[i].text())
+        for i in deleted_options:
+            self.sql_helper.remove_option(i)
         super(EditOptionDialog, self).accept()
 
     def reject(self):

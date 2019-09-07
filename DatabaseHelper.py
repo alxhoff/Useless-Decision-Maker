@@ -138,6 +138,11 @@ class SQLHelper:
                 sql = "DELETE FROM options WHERE string='{}'".format(option)
             self.conn.commit()
 
+    def remove_option(self, o_id):
+        sql = """ DELETE from options where option_id={}""".format(o_id)
+        self.cursor.execute(sql)
+        self.conn.commit()
+
     def get_all_decisions(self):
         ret = []
         ids = self.get_all_decision_ids()
